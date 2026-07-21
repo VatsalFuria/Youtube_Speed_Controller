@@ -59,7 +59,10 @@ async function applySavedSpeedToVideo(video = currentVideo) {
   const settings = sanitizeSettings(data.settings);
   const speed = clampToSettings(data.playbackSpeed ?? DEFAULT_SPEED, settings);
 
-  if (data.playbackSpeed !== speed || JSON.stringify(data.settings) !== JSON.stringify(settings)) {
+  if (
+    data.playbackSpeed !== speed ||
+    JSON.stringify(data.settings) !== JSON.stringify(settings)
+  ) {
     await storageSet({ playbackSpeed: speed, settings });
   }
 
@@ -116,15 +119,23 @@ function isEditableTarget(target) {
   }
 
   return Boolean(
-    target.closest("input, textarea, select, [contenteditable='true'], [contenteditable=''], [contenteditable]"),
+    target.closest(
+      "input, textarea, select, [contenteditable='true'], [contenteditable=''], [contenteditable]",
+    ),
   );
 }
 
 async function updateSpeedFromShortcut(direction) {
   const data = await storageGet(["playbackSpeed", "settings"]);
   const settings = sanitizeSettings(data.settings);
-  const currentSpeed = clampToSettings(data.playbackSpeed ?? DEFAULT_SPEED, settings);
-  const nextSpeed = clampToSettings(currentSpeed + direction * SHORTCUT_STEP, settings);
+  const currentSpeed = clampToSettings(
+    data.playbackSpeed ?? DEFAULT_SPEED,
+    settings,
+  );
+  const nextSpeed = clampToSettings(
+    currentSpeed + direction * SHORTCUT_STEP,
+    settings,
+  );
 
   await storageSet({
     playbackSpeed: nextSpeed,
@@ -140,8 +151,10 @@ document.addEventListener(
       return;
     }
 
-    const isIncrease = event.key === ">" || (event.code === "Period" && event.shiftKey);
-    const isDecrease = event.key === "<" || (event.code === "Comma" && event.shiftKey);
+    const isIncrease =
+      event.key === ">" || (event.code === "Period" && event.shiftKey);
+    const isDecrease =
+      event.key === "<" || (event.code === "Comma" && event.shiftKey);
 
     if (!isIncrease && !isDecrease) {
       return;

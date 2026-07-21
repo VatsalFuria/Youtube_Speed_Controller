@@ -14,6 +14,7 @@ const {
 
 const slider = document.getElementById("speed-slider");
 const speedValue = document.getElementById("speed-value");
+const timeEstimate = document.getElementById("time-estimate");
 const increaseButton = document.getElementById("plus0.5-btn");
 const decreaseButton = document.getElementById("minus0.5-btn");
 const sliderRange = document.querySelector(".slider-range");
@@ -150,6 +151,7 @@ function updateRangeUI(settings) {
 function updateUI(speed, settings = currentSettings) {
   slider.value = speed.toFixed(1);
   speedValue.textContent = formatSpeed(speed);
+  timeEstimate.textContent = "10 mins will play in: " + (10.00/speed).toFixed(2) + " mins.";
   const span = settings.maxSpeed - settings.minSpeed || SLIDER_STEP;
   const fillPercentage = ((speed - settings.minSpeed) / span) * 100;
   slider.style.setProperty("--slider-fill", `${fillPercentage}%`);
